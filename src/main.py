@@ -83,7 +83,7 @@ def main(argv):
 
 	obfuscation.decompile_apk()
 
-	logger.info("Completed decompiling APK {0}")
+	logger.info("Completed decompiling APK")
 
 	logger.info('Obfuscating with plugins: {0} \n'.format(plugins))
 	
