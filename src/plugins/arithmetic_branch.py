@@ -54,39 +54,41 @@ def obfuscate(obfuscation: Obfuscation):
 
                         # Check the number of registers available(for example: .locals 5)
                         if match and int(match.group("local_count")) >= 2:
-                            # If two or more registers are available, we add a fake branch at the beginning of the method
+                            # If two or more registers are available, we add a
+                            # fake branch at the beginning of the method
                             # One branch will continue from the beginning of the method where it was added
-                            # The other branch will go to the end of the method and it will then be returned to the beginning through a 'goto' instruction
+                            # The other branch will go to the end of the method and it will then be returned to the
+                            # beginning through a 'goto' instruction
 
                             v0 = random.randint(1, 32)  # Set a random integer value between 1 and 32 to v0
-                    v1 = random.randint(1, 32)  # Set a random integer value between 1 and 32 to v1
+                            v1 = random.randint(1, 32)  # Set a random integer value between 1 and 32 to v1
 
-                    start_label = "".join(random.choices(string.ascii_letters,
-                                                         k=16))  # Set a string with random sequence of ascii characters of length 16. This will be used for the start label
-                end_label = "".join(random.choices(string.ascii_letters,
-                                                   k=16))  # Set a string with random sequence of ascii characters of length 16. This will be used for the end label
-                tmp_label = "".join(random.choices(string.ascii_letters,
-                                                   k=16))  # Set a string with random sequence of ascii characters of length 16. This will be used for the temporary label
+                            start_label = "".join(random.choices(string.ascii_letters,
+                                                                 k=16))  # Set a string with random sequence of ascii characters of length 16. This will be used for the start label
+                            end_label = "".join(random.choices(string.ascii_letters,
+                                                           k=16))  # Set a string with random sequence of ascii characters of length 16. This will be used for the end label
+                            tmp_label = "".join(random.choices(string.ascii_letters,
+                                                           k=16))  # Set a string with random sequence of ascii characters of length 16. This will be used for the temporary label
 
-                out_file.write("\n\tconst v0, {0}\n".format(
-                    v0))  # Write to the output file an instruction that will assign value in variable v0 to the register v0 (for example: const v0, 12)
-                out_file.write("\tconst v1, {0}\n".format(
-                    v1))  # Write to the output file an instruction that will assign value in variable v1 to the register v1 (for example: const v1, 5)
-                out_file.write(
-                    "\tadd-int v0, v0, v1\n")  # Write to the output file an operation instruction that will add the values in registers v0 and v1 and insert the result in register v0 (for example: v0 = v0 + v1)
-                out_file.write(
-                    "\trem-int v0, v0, v1\n")  # Write to the output file an operation instruction that will calculate the modulus of values in registers v0 and v1 and insert the result in register v0 (for example: v0 = v0 % v1)
-                out_file.write("\tif-gtz v0, :{0}\n".format(
-                    tmp_label))  # Write to the output file a value judgement or conditional instruction that will check if the value if the value in register v0 is greater than zero. If True the condition will be executed by jumping to the section marked by the label 'tmp_label'. If False the instruction below it will be executed(for example:if-gtz v0, :condition)
-                out_file.write("\tgoto/32 :{0}\n".format(
-                    end_label))  # Write to the output file a 'goto' instruction that will cause the execution of code to jump to the section marked by the label 'end_label' (for example: goto :goto_label)
-                out_file.write("\t:{0}\n".format(
-                    tmp_label))  # Write to the output file the label 'tmp_label' (for example: :WejHkfuIndHKsjDf)
-                out_file.write("\t:{0}\n".format(
-                    start_label))  # Write to the output file the label 'start_label' (for example: :kguIOmfjtpqhGZBj)
+                            out_file.write("\n\tconst v0, {0}\n".format(
+                                v0))  # Write to the output file an instruction that will assign value in variable v0 to the register v0 (for example: const v0, 12)
+                            out_file.write("\tconst v1, {0}\n".format(
+                                v1))  # Write to the output file an instruction that will assign value in variable v1 to the register v1 (for example: const v1, 5)
+                            out_file.write(
+                                "\tadd-int v0, v0, v1\n")  # Write to the output file an operation instruction that will add the values in registers v0 and v1 and insert the result in register v0 (for example: v0 = v0 + v1)
+                            out_file.write(
+                                "\trem-int v0, v0, v1\n")  # Write to the output file an operation instruction that will calculate the modulus of values in registers v0 and v1 and insert the result in register v0 (for example: v0 = v0 % v1)
+                            out_file.write("\tif-gtz v0, :{0}\n".format(
+                                tmp_label))  # Write to the output file a value judgement or conditional instruction that will check if the value if the value in register v0 is greater than zero. If True the condition will be executed by jumping to the section marked by the label 'tmp_label'. If False the instruction below it will be executed(for example:if-gtz v0, :condition)
+                            out_file.write("\tgoto/32 :{0}\n".format(
+                                end_label))  # Write to the output file a 'goto' instruction that will cause the execution of code to jump to the section marked by the label 'end_label' (for example: goto :goto_label)
+                            out_file.write("\t:{0}\n".format(
+                                tmp_label))  # Write to the output file the label 'tmp_label' (for example: :WejHkfuIndHKsjDf)
+                            out_file.write("\t:{0}\n".format(
+                                start_label))  # Write to the output file the label 'start_label' (for example: :kguIOmfjtpqhGZBj)
 
-        else:
-            out_file.write(line)  # Write the line of text or data to the output file
+                    else:
+                        out_file.write(line)  # Write the line of text or data to the output file
 
     except Exception as e:
         logger.error(
@@ -94,4 +96,4 @@ def obfuscate(obfuscation: Obfuscation):
                 __name__, e
             )
         )
-    raise
+        raise
