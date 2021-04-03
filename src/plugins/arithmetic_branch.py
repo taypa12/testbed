@@ -14,8 +14,9 @@ def obfuscate(obfuscation: Obfuscation):
     logging.info('Running "{0}" obfuscator'.format(__name__))
 
     try:
-        for smali_file in obfuscation.smali_files:
-            with utils.edit_file(smali_file) as (in_file, out_file):
+        for smali_file in obfuscation.smali_files:  # It loops through from the list of smali files
+            with utils.edit_file(smali_file) as (
+            in_file, out_file):  # It uses the util function to edit the smali files
                 edit_method = False  # Flag that determines when to edit a method by inserting the obfuscation
                 start_label = None  # Set the start_label to null
                 end_label = None  # Set the end_label to null
@@ -34,7 +35,7 @@ def obfuscate(obfuscation: Obfuscation):
                     elif line.startswith(".end method") and edit_method:
                         # End of the method. We are now exiting the method
 
-                        # Check if start_label and end_label are not null(None)
+                        # Check if start_label and end_label are not null(None) #This is the part where the fake branch is being added
                         if start_label and end_label:
                             out_file.write("\t:{0}\n".format(
                                 end_label))  # Insert the string end_label at the end of the method. This label marks the beginning of a section or block of code
@@ -50,10 +51,11 @@ def obfuscate(obfuscation: Obfuscation):
                         # We are now inside the method
                         out_file.write(line)  # Write the line of text or data to the output file
                         match = re.compile(r"\s+\.locals\s(?P<local_count>\d+)").match(
+                            # the register are identified using this portion
                             line)  # If zero or more characters at the beginning of string match the regular expression pattern, a corresponding match object is returned. If the string does not match the pattern, None is returned
 
                         # Check the number of registers available(for example: .locals 5)
-                        if match and int(match.group("local_count")) >= 2:
+                        if match and int(match.group("local_count")) >= 2: #because it is an arithmetic branch, u need two register's to check
                             # If two or more registers are available, we add a
                             # fake branch at the beginning of the method
                             # One branch will continue from the beginning of the method where it was added
@@ -66,9 +68,9 @@ def obfuscate(obfuscation: Obfuscation):
                             start_label = "".join(random.choices(string.ascii_letters,
                                                                  k=16))  # Set a string with random sequence of ascii characters of length 16. This will be used for the start label
                             end_label = "".join(random.choices(string.ascii_letters,
-                                                           k=16))  # Set a string with random sequence of ascii characters of length 16. This will be used for the end label
+                                                               k=16))  # Set a string with random sequence of ascii characters of length 16. This will be used for the end label
                             tmp_label = "".join(random.choices(string.ascii_letters,
-                                                           k=16))  # Set a string with random sequence of ascii characters of length 16. This will be used for the temporary label
+                                                               k=16))  # Set a string with random sequence of ascii characters of length 16. This will be used for the temporary label
 
                             out_file.write("\n\tconst v0, {0}\n".format(
                                 v0))  # Write to the output file an instruction that will assign value in variable v0 to the register v0 (for example: const v0, 12)
