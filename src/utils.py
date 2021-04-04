@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 import os
 import logging
+import random
 
 logger = logging.getLogger(
     "{0}".format(__name__)
@@ -62,3 +63,15 @@ def edit_file(file_name: str):
         except OSError:
             pass
 
+# For any methods that require random
+def get_ran_int(min: int, max: int):
+	return random.randint(min,max)
+
+# For any methods that read from file resources
+def get_file_contents(file):
+	with open(file, "r", encoding="utf-8") as f:
+		return list(line.strip() for line in f)
+
+# For methods that require op codes
+def get_op_codes():
+	return get_file_contents(os.path.join(os.path.dirname(__file__),"resources","op_codes.txt"))
