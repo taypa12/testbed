@@ -2,11 +2,23 @@ from contextlib import contextmanager
 import os
 import logging
 import random
+import re
+import itertools
 
 logger = logging.getLogger(
     "{0}".format(__name__)
 )
-
+method_pattern = re.compile(
+    r"\.method.+?(?P<method_name>\S+?)"
+    r"\((?P<method_param>\S*?)\)"
+    r"(?P<method_return>\S+)",
+    re.UNICODE,
+)
+class_pattern = re.compile(r"\.class.+?(?P<class_name>\S+?;)", re.UNICODE)
+def get_random_list_permutations(input_list: list) -> list:
+    permuted_list = list(itertools.permutations(input_list))
+    random.shuffle(permuted_list)
+    return permuted_list
 
 # Referenced from https://www.zopatista.com/python/2013/11/26/inplace-file-rewriting/
 @contextmanager
